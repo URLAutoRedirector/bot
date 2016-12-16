@@ -1,4 +1,5 @@
 # coding: utf-8
+# handle build and release process
 
 require "json"
 
