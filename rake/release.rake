@@ -35,8 +35,10 @@ namespace :release do
 
   desc "Create and push a tag"
   task :tag do
-    sh "git tag #{version}"
-    sh "git push origin #{version}"
+    Dir.chdir("../UrlAutoRedirector") do
+      sh "git tag #{version}"
+      sh "git push origin #{version}"
+    end
   end
 
   desc "Update changelog"
