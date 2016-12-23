@@ -1,13 +1,6 @@
 # coding: utf-8
 # handle build and release process
 
-require "json"
-
-def version
-  manifest = JSON.parse(open("../UrlAutoRedirector/src/manifest.json").read)
-  manifest["version"]
-end
-
 namespace :release do
   desc "Build package"
   task :build, [:force] do |t, args|
