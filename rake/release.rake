@@ -35,6 +35,34 @@ namespace :release do
   end
 
   desc "Update changelog"
-  task :changelog do
+  task :changelog, [:number] do |t, args|
+    args.with_defaults(:number => 1)
+    # get changes
+    changes = []
+    Dir.chdir("../UrlAutoRedirector") do
+      sh "git log -n #{args[:number]} --pretty=format:'%h: %s' > dist/temp.log"
+      changes = File.read("dist/temp.log").split("\n")
+    end
+    # update changelog to website
+    Dir.chdir("../UrlAutoRedirector.github.io") do
+      require "yaml"
+      changelogs = YAML.load_file("_data/changelog.yml")
+
+      new_change = {
+        "version" => version,
+        "changes" => []
+      }
+
+      changes.each do |change|
+        detail = change.split(": ")
+        new_change["changes"] << {
+          "text" => detail[1],
+          "hash" => detail[0]
+        }
+      end
+
+      changelogs.insert(0, new_change)
+      File.write("_data/changelog.yml", changelogs.to_yaml)
+    end
   end
 end
