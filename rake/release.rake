@@ -54,9 +54,9 @@ namespace :release do
       }
 
       changes.each do |change|
-        detail = change.split(": ")
+        detail = change.split(":")
         new_change["changes"] << {
-          "text" => detail[1],
+          "text" => detail[1..-1].join(':').strip!,
           "hash" => detail[0]
         }
       end
